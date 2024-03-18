@@ -18,26 +18,26 @@ from (select 1) t
 where true in (select true)
 ;
 
---  Subquery with tab example
+-- Subquery with tab example
 -- спочатку розберемо саму табличку з підзапиту
 select 
-			  ad_date,
-              campaign_name,
-              sum(spend) as daily_spend
-     from google_ads_basic_daily
-     group by 1, 2
-  ;   
+  ad_date,
+  campaign_name,
+  sum(spend) as daily_spend
+from google_ads_basic_daily
+group by 1, 2
+;   
      
  -- приклад з підзапитом і табл    
 select 
-	  campaign_name,
-      avg(daily_spend) as avg_daily_spend
+  campaign_name,
+  avg(daily_spend) as avg_daily_spend
 from (select 
-			  ad_date,
-              campaign_name,
-              sum(spend) as daily_spend
-		     from google_ads_basic_daily
-		     group by 1, 2) as campaign_daily_spend
+        ad_date,
+        campaign_name,
+        sum(spend) as daily_spend
+       from google_ads_basic_daily
+       group by 1, 2) as campaign_daily_spend
 group by 1
 ;
 
@@ -47,10 +47,11 @@ limit 100
 ;
 
 -- приклад з підзапитом в колонці
-select  distinct campaign_id,
-		     (select distinct campaign_name
-		      from facebook_campaign t2
-		      where t1.campaign_id = t2.campaign_id) campaign_name
+select  
+  distinct campaign_id,
+  (select distinct campaign_name
+   from facebook_campaign t2
+   where t1.campaign_id = t2.campaign_id) campaign_name
 from facebook_ads_basic_daily as t1
 where campaign_id is not null
 ;
@@ -59,17 +60,17 @@ where campaign_id is not null
 select *
 from facebook_ads_basic_daily fabd
 where campaign_id in (select distinct campaign_id
-                    from facebook_campaign fc)
+                      from facebook_campaign fc)
 ;
 
 --------------------------------------------
 -- CTE
 
 with common_table as (
-	select 1 as num, 'a' as letter
+ select 1 as num, 'a' as letter
 ),
 common_table2 as (
-	select 2 as num, 'b' as letter
+ select 2 as num, 'b' as letter
 )
 select *
 from common_table
@@ -77,23 +78,25 @@ where 1 in (select num from common_table)
 ;
 
 with fb as (
-	select 
-			ad_date ,
-			campaign_id,
-			value 
-	from facebook_ads_basic_daily fabd 
-	),
- google as (
-	 select ad_date , 
-				campaign_name,  
-				value
-	from google_ads_basic_daily gabd 
-	where campaign_name in ('New items', 'Hobbies')
-	)
-	select  sum(fb.value)
-	from fb 
-	where fb.ad_date in (select distinct ad_date from  google)
-	;
+ select 
+   ad_date ,
+   campaign_id,
+   value 
+ from facebook_ads_basic_daily fabd 
+),
+google as (
+  select 
+    ad_date , 
+    campaign_name,  
+    value
+  from google_ads_basic_daily gabd 
+  where campaign_name in ('New items', 'Hobbies')
+)
+select
+  sum(fb.value)
+from fb 
+where fb.ad_date in (select distinct ad_date from  google)
+;
 
 --------------------------------------------
 -- Q&A 
@@ -110,9 +113,10 @@ FROM (select 1 ) AS table_name
 --Запит:
 SELECT ROUND(AVG(average_salary), 0)
 FROM (SELECT 
-				AVG(salary) AS average_salary
-             FROM "HR".employees
-             GROUP BY department_id) as t1; 
+        AVG(salary) AS average_salary
+      FROM "HR".employees
+      GROUP BY department_id) as t1
+; 
 -- то просто аліас, обовязково маємо давати табличці в блоці where якщо формуємо її підзапитом.
 -- можна дати будь яку свою, наприклад замінила на t1            
             
@@ -130,9 +134,10 @@ ORDER BY first_name, last_name
 ;            
 
 
-select round(5.23434639587),
-			round(5.23434639587,2),
-			round(5.23434639587,0)
+select
+  round(5.23434639587),
+  round(5.23434639587,2),
+  round(5.23434639587,0)
 ;
 
 --------------------------------------------
@@ -140,35 +145,34 @@ select round(5.23434639587),
 
 -- Ad_date, traffic_source (facebook/ google), value_sum 
 with fb as (
-	select 
-			ad_date ,
-			'facebook' as traffic_source,
-			sum(value) as value_sum,
-			sum(spend) as spend_sum
-
-	from facebook_ads_basic_daily fabd 
-	where ad_date is not null
-	group by ad_date
-	),
- google as (
-	select 
-	       'google'      as traffic_source,
-			ad_date ,
-			sum(value) as value_sum,
-			sum(spend) as spend_sum
-
-	from google_ads_basic_daily
-	where ad_date is not null
-	group by ad_date
-	),
+  select 
+    ad_date ,
+    'facebook' as traffic_source,
+    sum(value) as value_sum,
+    sum(spend) as spend_sum
+  from facebook_ads_basic_daily fabd 
+  where ad_date is not null
+  group by ad_date
+),
+google as (
+  select 
+    'google'      as traffic_source,
+    ad_date ,
+    sum(value) as value_sum,
+    sum(spend) as spend_sum
+  from google_ads_basic_daily
+  where ad_date is not null
+  group by ad_date
+),
 common_tab as (	
-	select * from fb
-	union all
-	select ad_date, traffic_source,  value_sum, spend_sum from google
+  select * from fb
+  union all
+  select ad_date, traffic_source,  value_sum, spend_sum from google
 )
-select ad_date, 
-			sum(value_sum) as value_sum,
-			sum(spend_sum) as spend_sum
+select
+  ad_date, 
+  sum(value_sum) as value_sum,
+  sum(spend_sum) as spend_sum
 into ad_results_by_date -- записуємо результат запиту в таблицю ad_results_by_date
 from common_tab
 group by ad_date
@@ -196,10 +200,10 @@ select 1 as "number", 'd' as letter
 -- VIEW
 CREATE VIEW employees_details_mlysenko AS
 select 
-	employee_id, 
-	first_name, 
-	last_name, 
-	department_id
+  employee_id, 
+  first_name, 
+  last_name, 
+  department_id
 FROM "HR".employees e
 ;
 
@@ -265,5 +269,6 @@ select .... google_ads_basic_daily
 )
 select ...
 from all_ad_data
+group by 
 ...
 */
