@@ -1,0 +1,13 @@
+1) SQL Style Guide (Стандарти оформлення стилістики SQL запитів) від Simon Holywell https://www.sqlstyle.guide/ua/
+2) Відео ТОП 10 SQL Тренажерів для технічних співбесід https://youtu.be/Ds1KwRvLSbM?si=6rfSK-nusI3ANh5U
+3) Посилання на трненажери:
+✔ SQLBolt https://sqlbolt.com/
+✔ sql-practice https://www.sql-practice.com/
+✔ QLZOO https://sqlzoo.net/wiki/SQL_Tutorial
+✔ SQL course https://www.sqlcourse.com/
+✔ DataLemur https://datalemur.com/
+✔ Mode https://mode.com/
+✔ W3 Schools https://www.w3schools.com/
+✔ HackerRank https://www.hackerrank.com/
+✔ StrataScratch https://www.stratascratch.com/
+✔ LeetCode https://leetcode.com/
