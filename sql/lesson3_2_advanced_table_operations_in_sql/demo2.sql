@@ -5,9 +5,9 @@ drop table if exists __users_mlysenko2
 ;
 
 create table __users_mlysenko2 (
-		user_id int,
-		user_name varchar,
-		email varchar
+  user_id   int,
+  user_name varchar,
+  email     varchar
 )
 ;
 
@@ -20,7 +20,7 @@ values (1,'John','jo@gmail.com')
 
 insert into __users_mlysenko2 (user_id,user_name,email)
 values (2,'Marie','mar@gmail.com'),
-	   (3,'Lily','lily@gmail.com')
+       (3,'Lily','lily@gmail.com')
 ;
 
 update __users_mlysenko2
@@ -31,8 +31,8 @@ where user_id = 2
 -- можемо одним запитом оновлювати одразу декілька колонок
 update __users_mlysenko2
 set is_deleted = true,
-	user_name  = 'Maryana',
-	email      = 'mar3@gmail.com'
+    user_name  = 'Maryana',
+    email      = 'mar3@gmail.com'
 where user_id = 2
 ;
 
@@ -78,11 +78,11 @@ values (1,'John','jo@gmail.com')
 ;
 
 with deduplicate_tab as (
-	select * 
-	from __users_mlysenko2
-	union 
-	select * 
-	from __users_mlysenko2
+ select * 
+ from __users_mlysenko2
+ union 
+ select * 
+ from __users_mlysenko2
 )
 select * 
 into __users_mlysenko3
