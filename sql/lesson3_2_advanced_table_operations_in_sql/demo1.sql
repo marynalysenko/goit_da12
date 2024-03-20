@@ -15,7 +15,7 @@ select
   gabd.spend   as google_spends
 from facebook_ads_basic_daily fabd 
 join facebook_campaign fc on fc.campaign_id = fabd.campaign_id 
-join facebook_adset fa on fabd.adset_id = fa.adset_id
+join facebook_adset fa    on fabd.adset_id = fa.adset_id
 join google_ads_basic_daily gabd on gabd.ad_date = fabd.ad_date 
 	and gabd.campaign_name = fc.campaign_name 
 	and gabd.adset_name = fa.adset_name 
@@ -36,20 +36,20 @@ from google_ads_basic_daily gabd
 -- Порвіняти для кампейнів суму витрат (спробувати з різними типа джойна)
 
 with facebook as (
-	select 
+  select 
       fc.campaign_name,
       sum(fabd.spend ) as total_spend
-	from facebook_ads_basic_daily fabd 
-	left join facebook_campaign fc on fc.campaign_id = fabd.campaign_id 
-	where fabd.campaign_id is not null 
-	group by fc.campaign_name -- 11
+  from facebook_ads_basic_daily fabd 
+  left join facebook_campaign fc on fc.campaign_id = fabd.campaign_id 
+  where fabd.campaign_id is not null 
+  group by fc.campaign_name -- 11
 ),
 google as (
-	select 
-	  campaign_name,
-	  sum(spend) as total_spend
-	from google_ads_basic_daily gabd 
-	group by campaign_name -- 9
+  select 
+      campaign_name,
+      sum(spend) as total_spend
+  from google_ads_basic_daily gabd 
+  group by campaign_name -- 9
 )
 select 
   t1.campaign_name   as fb_campaign_name, 
@@ -115,8 +115,8 @@ with all_ad_results as (
       fabd.spend,
       'facebook' as ad_source
     from facebook_ads_basic_daily as fabd 
-    left join facebook_campaign as fc on fc.campaign_id = fabd.campaign_id 
-    left join facebook_adset as fa on fabd.adset_id = fa.adset_id
+    left join facebook_campaign   as fc on fc.campaign_id = fabd.campaign_id 
+    left join facebook_adset      as fa on fabd.adset_id = fa.adset_id
     where fabd.campaign_id is not null
     union all 
     select 
@@ -128,8 +128,8 @@ with all_ad_results as (
     from google_ads_basic_daily gabd 
 )
 select 
-	campaign_name, 
-	sum(spend) as total_spend
+  campaign_name, 
+  sum(spend) as total_spend
 from all_ad_results
 group by 1
 order by total_spend desc
@@ -160,9 +160,9 @@ with all_ad_results as (
     from google_ads_basic_daily gabd 
 )
 select 
-	campaign_name, 
-	sum(spend)                     as total_spend,
-	sum(value)::numeric/sum(spend) as roi
+  campaign_name, 
+  sum(spend)                     as total_spend,
+  sum(value)::numeric/sum(spend) as roi
 from all_ad_results
 group by 1
 having sum(value)::numeric/sum(spend)> 1
@@ -202,8 +202,8 @@ with all_ad_results as (
     from google_ads_basic_daily gabd 
 )
 select 
-	campaign_name, 
-	round((sum(clicks)::numeric/sum(impressions))*100.0,2) as ctr
+  campaign_name, 
+  round((sum(clicks)::numeric/sum(impressions))*100.0,2) as ctr
 from all_ad_results
 group by 1
 order by ctr desc
@@ -225,8 +225,8 @@ with all_ad_results as (
     from google_ads_basic_daily gabd 
 )
 select 
-	campaign_name, 
-	sum(leads) as total_leads
+  campaign_name, 
+  sum(leads) as total_leads
 from all_ad_results
 group by 1
 order by total_leads desc
